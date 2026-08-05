@@ -9,32 +9,42 @@ plugins {
 
 kotlin {
     jvm()
-    
+
     android {
-       namespace = "com.example.wakaru.shared"
-       compileSdk = libs.versions.android.compileSdk.get().toInt()
-       minSdk = libs.versions.android.minSdk.get().toInt()
-    
-       compilerOptions {
-           jvmTarget = JvmTarget.JVM_11
-       }
-       androidResources {
-           enable = true
-       }
-       withHostTest {
-           isIncludeAndroidResources = true
-       }
-       withDeviceTestBuilder {
-           sourceSetTreeName = "test"
-       }.configure {
-           instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-       }
+        namespace = "com.example.wakaru.shared"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+        androidResources {
+            enable = true
+        }
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
+        withDeviceTestBuilder {
+            sourceSetTreeName = "test"
+        }.configure {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.compose.uiTooling)
+            api("com.positiondev.epublib:epublib-core:3.1") {
+                exclude(group = "xmlpull", module = "xmlpull")
+            }
+            api(libs.kuromoji.ipadic)
+        }
+        jvmMain.dependencies {
+            api("com.positiondev.epublib:epublib-core:3.1") {
+                exclude(group = "xmlpull", module = "xmlpull")
+            }
+            api(libs.kuromoji.ipadic)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
